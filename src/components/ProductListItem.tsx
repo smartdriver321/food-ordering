@@ -1,4 +1,11 @@
-import { Image, StyleSheet, Text, View } from 'react-native'
+import {
+	FlatList,
+	Image,
+	ListRenderItemInfo,
+	StyleSheet,
+	Text,
+	View,
+} from 'react-native'
 
 import { Product } from '@/types'
 import Colors from '@/constants/Colors'
@@ -16,6 +23,7 @@ export default function ProductListItem({ product }: ProductListItemProps) {
 			<Image
 				source={{ uri: product.image || defaultPizzaImage }}
 				style={styles.image}
+				resizeMode='contain'
 			/>
 
 			<Text style={styles.title}>{product.name}</Text>
@@ -29,6 +37,9 @@ const styles = StyleSheet.create({
 		backgroundColor: 'white',
 		padding: 10,
 		borderRadius: 20,
+		flex: 1,
+		margin: 10,
+		maxWidth: '45%',
 	},
 
 	image: {
