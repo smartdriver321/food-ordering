@@ -1,18 +1,16 @@
-import React from 'react'
-import FontAwesome from '@expo/vector-icons/FontAwesome'
+import { Pressable, useColorScheme } from 'react-native'
 import { Link, Tabs } from 'expo-router'
-import { Pressable } from 'react-native'
+import FontAwesome from '@expo/vector-icons/FontAwesome'
 
-import Colors from '../../constants/Colors'
-import { useColorScheme } from '../../components/useColorScheme'
-import { useClientOnlyValue } from '../../components/useClientOnlyValue'
+import Colors from '@/constants/Colors'
+import { useClientOnlyValue } from '@/components/useClientOnlyValue'
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
 	name: React.ComponentProps<typeof FontAwesome>['name']
 	color: string
 }) {
-	return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />
+	return <FontAwesome size={20} style={{ marginBottom: -3 }} {...props} />
 }
 
 export default function TabLayout() {
@@ -27,11 +25,16 @@ export default function TabLayout() {
 				headerShown: useClientOnlyValue(false, true),
 			}}
 		>
+			<Tabs.Screen name='index' options={{ href: null }} />
+
 			<Tabs.Screen
-				name='index'
+				name='menu'
 				options={{
-					title: 'Tab One',
-					tabBarIcon: ({ color }) => <TabBarIcon name='code' color={color} />,
+					title: 'Menu',
+					headerShown: false,
+					tabBarIcon: ({ color }) => (
+						<TabBarIcon name='cutlery' color={color} />
+					),
 					headerRight: () => (
 						<Link href='/modal' asChild>
 							<Pressable>
@@ -48,11 +51,12 @@ export default function TabLayout() {
 					),
 				}}
 			/>
+
 			<Tabs.Screen
 				name='two'
 				options={{
-					title: 'Tab Two',
-					tabBarIcon: ({ color }) => <TabBarIcon name='code' color={color} />,
+					title: 'Orders',
+					tabBarIcon: ({ color }) => <TabBarIcon name='list' color={color} />,
 				}}
 			/>
 		</Tabs>
