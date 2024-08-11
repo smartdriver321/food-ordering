@@ -6,7 +6,7 @@ import { useAuth } from '@/providers/AuthProvider'
 import Button from '../components/Button'
 
 export default function Index() {
-	const { session, loading } = useAuth()
+	const { session, loading, isAdmin } = useAuth()
 
 	if (loading) {
 		return <ActivityIndicator />
@@ -14,6 +14,10 @@ export default function Index() {
 
 	if (!session) {
 		return <Redirect href={'/sign-in'} />
+	}
+
+	if (!isAdmin) {
+		return <Redirect href={'/(user)'} />
 	}
 
 	return (
@@ -24,10 +28,6 @@ export default function Index() {
 
 			<Link href={'/(admin)'} asChild>
 				<Button text='Admin' />
-			</Link>
-
-			<Link href={'/sign-in'} asChild>
-				<Button text='Sign in' />
 			</Link>
 
 			<Button onPress={() => supabase.auth.signOut()} text='Sign out' />
