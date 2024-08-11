@@ -83,6 +83,23 @@ export default function CreateProductScreen() {
 		}
 	}
 
+	const onDelete = () => {
+		console.warn('DELETE!!!')
+	}
+
+	const confirmDelete = () => {
+		Alert.alert('Confirm', 'Are you sure you want to delete this product', [
+			{
+				text: 'Cancel',
+			},
+			{
+				text: 'Delete',
+				style: 'destructive',
+				onPress: onDelete,
+			},
+		])
+	}
+
 	return (
 		<View style={styles.container}>
 			<Stack.Screen
@@ -116,6 +133,11 @@ export default function CreateProductScreen() {
 
 			<Text style={{ color: 'red' }}>{errors}</Text>
 			<Button onPress={onSubmit} text={isUpdating ? 'Update' : 'Create'} />
+			{isUpdating && (
+				<Text onPress={confirmDelete} style={styles.textButton}>
+					Delete
+				</Text>
+			)}
 		</View>
 	)
 }
