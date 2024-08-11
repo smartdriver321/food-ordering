@@ -1,8 +1,9 @@
-import { Pressable, useColorScheme } from 'react-native'
-import { Link, Tabs } from 'expo-router'
+import { useColorScheme } from 'react-native'
+import { Redirect, Tabs } from 'expo-router'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 
 import Colors from '@/constants/Colors'
+import { useAuth } from '@/providers/AuthProvider'
 import { useClientOnlyValue } from '@/components/useClientOnlyValue'
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
@@ -15,6 +16,11 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
 	const colorScheme = useColorScheme()
+	const { session } = useAuth()
+
+	if (!session) {
+		return <Redirect href={'/'} />
+	}
 
 	return (
 		<Tabs
