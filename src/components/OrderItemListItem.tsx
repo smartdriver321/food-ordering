@@ -1,50 +1,71 @@
-import { View, Text, StyleSheet, Pressable } from 'react-native'
-import { Link, useSegments } from 'expo-router'
-import relativeTime from 'dayjs/plugin/relativeTime'
-import dayjs from 'dayjs'
+import { View, Text, StyleSheet, Image } from 'react-native'
 
-import { Order } from '@/types'
+import { OrderItem } from '@/types'
+import Colors from '@/constants/Colors'
+import { defaultPizzaImage } from './ProductListItem'
 
-dayjs.extend(relativeTime)
-
-type OrderListItemProps = {
-	order: Order
+type OrderItemListItemProps = {
+	item: OrderItem
 }
 
-export default function OrderListItem({ order }: OrderListItemProps) {
-	const segments = useSegments()
-
+export default function OrderItemListItem({ item }: OrderItemListItemProps) {
 	return (
-		<Link href={`/${segments[0]}/orders/${order.id}`} asChild>
-			<Pressable style={styles.container}>
-				<View>
-					<Text style={styles.title}>Order #{order.id}</Text>
-					<Text style={styles.time}>{dayjs(order.created_at).fromNow()}</Text>
+		<View style={styles.container}>
+			<Image
+				source={{ uri: item.products.image || defaultPizzaImage }}
+				style={styles.image}
+				resizeMode='contain'
+			/>
+			<View style={{ flex: 1 }}>
+				<Text style={styles.title}>{item.products.name}</Text>
+				<View style={styles.subtitleContainer}>
+					<Text style={styles.price}>${item.products.price.toFixed(2)}</Text>
+					<Text>Size: {item.size}</Text>
 				</View>
-
-				<Text style={styles.status}>{order.status}</Text>
-			</Pressable>
-		</Link>
+			</View>
+			<View style={styles.quantitySelector}>
+				<Text style={styles.quantity}>{item.quantity}</Text>
+			</View>
+		</View>
 	)
 }
 
 const styles = StyleSheet.create({
 	container: {
 		backgroundColor: 'white',
-		padding: 10,
 		borderRadius: 10,
+		padding: 5,
+		flex: 1,
 		flexDirection: 'row',
-		justifyContent: 'space-between',
 		alignItems: 'center',
 	},
+	image: {
+		width: 75,
+		aspectRatio: 1,
+		alignSelf: 'center',
+		marginRight: 10,
+	},
 	title: {
-		fontWeight: 'bold',
-		marginVertical: 5,
-	},
-	time: {
-		color: 'gray',
-	},
-	status: {
 		fontWeight: '500',
+		fontSize: 16,
+		marginBottom: 5,
+	},
+	subtitleContainer: {
+		flexDirection: 'row',
+		gap: 5,
+	},
+	quantitySelector: {
+		flexDirection: 'row',
+		gap: 10,
+		alignItems: 'center',
+		marginVertical: 10,
+	},
+	quantity: {
+		fontWeight: '500',
+		fontSize: 18,
+	},
+	price: {
+		color: Colors.light.tint,
+		fontWeight: 'bold',
 	},
 })
