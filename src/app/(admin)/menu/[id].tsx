@@ -12,12 +12,12 @@ import { defaultPizzaImage } from '@/components/ProductListItem'
 const sizes: PizzaSize[] = ['S', 'M', 'L', 'XL']
 
 export default function ProductDetailsScreen() {
+	const [selectedSize, setSelectedSize] = useState<PizzaSize>('M')
+
 	const { id } = useLocalSearchParams()
 	const router = useRouter()
 
 	const { addItem } = useCart()
-
-	const [selectedSize, setSelectedSize] = useState<PizzaSize>('M')
 
 	const product = products.find((p) => p.id.toString() === id)
 

@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { View, Text, StyleSheet, TextInput, Image } from 'react-native'
-import { Stack } from 'expo-router'
+import { View, Text, StyleSheet, TextInput, Image, Alert } from 'react-native'
+import { Stack, useLocalSearchParams } from 'expo-router'
 import * as ImagePicker from 'expo-image-picker'
 
 import Colors from '@/constants/Colors'
@@ -12,6 +12,9 @@ export default function CreateProductScreen() {
 	const [price, setPrice] = useState('')
 	const [errors, setErrors] = useState('')
 	const [image, setImage] = useState<string | null>(null)
+
+	const { id } = useLocalSearchParams()
+	const isUpdating = !!id
 
 	const resetFields = () => {
 		setName('')
@@ -39,18 +42,6 @@ export default function CreateProductScreen() {
 		return true
 	}
 
-	const onCreate = () => {
-		if (!validateInput()) {
-			return
-		}
-
-		console.warn('Creating product: ', name)
-
-		// Save in the database
-
-		resetFields()
-	}
-
 	const pickImage = async () => {
 		// No permissions request is necessary for launching the image library
 		let result = await ImagePicker.launchImageLibraryAsync({
@@ -65,10 +56,38 @@ export default function CreateProductScreen() {
 		}
 	}
 
+	const onCreate = () => {
+		if (!validateInput()) {
+			return
+		}
+
+		console.warn('Creating product: ', name)
+
+		// Save in the database
+
+		resetFields()
+	}
+
+	const onUpdateCreate = () => {
+		if (!validateInput()) {
+			return
+		}
+	}
+
+	const onSubmit = () => {
+		if (isUpdating) {
+			// Update
+			onUpdateCreate()
+		} else {
+			onCreate()
+		}
+	}
+
 	return (
 		<View style={styles.container}>
-			<Stack.Screen options={{ title: 'Create Product' }} />
-
+			<Stack.Screen
+				options={{ title: isUpdating ? 'Update Product' : 'Create Product' }}
+			/>
 			<Image
 				source={{ uri: image || defaultPizzaImage }}
 				style={styles.image}
@@ -96,8 +115,7 @@ export default function CreateProductScreen() {
 			/>
 
 			<Text style={{ color: 'red' }}>{errors}</Text>
-
-			<Button onPress={onCreate} text={'Create'} />
+			<Button onPress={onSubmit} text={isUpdating ? 'Update' : 'Create'} />
 		</View>
 	)
 }
