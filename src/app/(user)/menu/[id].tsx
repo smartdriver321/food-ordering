@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import {
 	ActivityIndicator,
-	Image,
 	Pressable,
 	StyleSheet,
 	Text,
@@ -14,6 +13,7 @@ import { useGetProductById } from '@/api/products'
 import { useCart } from '@/providers/CartProvider'
 import { defaultPizzaImage } from '@/components/ProductListItem'
 import Button from '@/components/Button'
+import RemoteImage from '@/components/RemoteImage'
 
 const sizes: PizzaSize[] = ['S', 'M', 'L', 'XL']
 
@@ -46,9 +46,11 @@ export default function ProductDetailsScreen() {
 		<View style={styles.container}>
 			<Stack.Screen options={{ title: product?.name }} />
 
-			<Image
-				source={{ uri: product.image || defaultPizzaImage }}
+			<RemoteImage
+				path={product?.image}
+				fallback={defaultPizzaImage}
 				style={styles.image}
+				resizeMode='contain'
 			/>
 
 			<Text>Select size</Text>
