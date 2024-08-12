@@ -1,11 +1,11 @@
 import { View, Text, StyleSheet, Image } from 'react-native'
 
-import { OrderItem } from '@/types'
+import { Tables } from '@/types'
 import Colors from '@/constants/Colors'
 import { defaultPizzaImage } from './ProductListItem'
 
 type OrderItemListItemProps = {
-	item: OrderItem
+	item: { products: Tables<'products'> } & Tables<'order_items'>
 }
 
 export default function OrderItemListItem({ item }: OrderItemListItemProps) {
